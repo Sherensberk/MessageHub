@@ -1,0 +1,28 @@
+pool:
+  name: Arm64
+  vmImage: 'ubuntu-20.04'
+
+trigger:
+  - main
+
+resources:
+  - repo: self
+
+variables:
+  ImagePullSecrete: 'regcred'
+
+stages:
+- stage: Build
+  displayName: Build stage
+  jobs:
+  - job: Build
+    displayName: Build
+    steps:
+   
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'DockerConnection'
+        repository: 'Sherensberk/MessageHub'
+        command: 'buildAndPush'
+        tags: '$(Build.BuildId)'
+        Dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
