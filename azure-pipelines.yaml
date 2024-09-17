@@ -1,15 +1,13 @@
-pool:
-  name: Arm64
-  vmImage: 'ubuntu-20.04'
-
 trigger:
-  - main
+- main
 
+pool:
+  vmImage: ubuntu-latest
+  
 resources:
   - repo: self
-
 variables:
-  ImagePullSecrete: 'regcred'
+  imagePullSecret: 'regcred'
 
 stages:
 - stage: Build
