@@ -8,24 +8,27 @@ client = motor.motor_asyncio.AsyncIOMotorClient(MONGO_DETAILS)
 database = client.HUB
 message_collection = database.get_collection("messages")
 
+
 def message_helper(message) -> dict:
     return {
         "id": str(message["_id"]),
         "conteudo": message["conteudo"],
         "remetente": message["remetente"],
+        "destinatario": message["destinatario"],
     }
 
 
 # Retrieve all messages present in the database
-async def retrieve_messages():
+async def retrieve_messages(user_id):
     messages = []
-    async for message in message_collection.find():
+    async for message in message_collection.find({ "$or": [ { "remetente": int(user_id) }, { "destinatario": int(user_id) } ] }):
         messages.append(message_helper(message))
     return messages
 
 
 # Add a new message into to the database
 async def add_message(message_data: dict) -> dict:
+    print(message_data)
     message = await message_collection.insert_one(message_data)
     new_message = await message_collection.find_one({"_id": message.inserted_id})
     return message_helper(new_message)

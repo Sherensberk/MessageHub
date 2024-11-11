@@ -2,26 +2,30 @@ from typing import Optional
 from pydantic import BaseModel, Field
 
 class MessageSchema(BaseModel):
-    remetente: str = Field(...)
+    remetente: int = Field(...)
+    destinatario: int = Field(...)
     conteudo: str = Field(...)
 
     class Config:
         json_schema_extra = {
             "example": {
-                "remetente": "Cleber Souza",
+                "remetente": 12,
+                "destinatario": 23,
                 "conteudo": "Olá Henrycke",
             }
         }
 
 
 class UpdateMessageModel(BaseModel):
-    remetente: Optional[str]
+    remetente: Optional[int]
+    destinatario: Optional[int]
     conteudo: Optional[str]
 
     class Config:
         json_schema_extra = {
             "example": {
-                "remetente": "Cleber Souza",
+                "remetente": 23,
+                "destinatario": 12,
                 "conteudo": "Olá Henrycke",
             }
         }

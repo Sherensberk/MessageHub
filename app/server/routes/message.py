@@ -21,13 +21,14 @@ router = APIRouter()
 @router.post("/", response_description="Message data added into the database")
 async def add_message_data(message: MessageSchema = Body(...)):
     message = jsonable_encoder(message)
+    print(message)
     new_message = await add_message(message)
     return ResponseModel(new_message, "Message added successfully.")
 
 
-@router.get("/", response_description="Messages retrieved")
-async def get_messages():
-    messages = await retrieve_messages()
+@router.get("/{id}", response_description="Messages retrieved")
+async def get_messages(id):
+    messages = await retrieve_messages(id)
     if messages:
         return ResponseModel(messages, "Messages data retrieved successfully")
     return ResponseModel(messages, "Empty list returned")
