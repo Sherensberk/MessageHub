@@ -15,13 +15,16 @@ from server.models.message import (
     UpdateMessageModel,
 )
 
+from server.bus import ServiceBusManager
+
+bus = ServiceBusManager()
 router = APIRouter()
 
 
 @router.post("/", response_description="Message data added into the database")
 async def add_message_data(message: MessageSchema = Body(...)):
     message = jsonable_encoder(message)
-    print(message)
+    bus.send_message({'id':message['remetente']})
     new_message = await add_message(message)
     return ResponseModel(new_message, "Message added successfully.")
 

@@ -1,11 +1,12 @@
 import os
 import json
 from azure.servicebus import ServiceBusClient, ServiceBusMessage
-from azure.servicebus.aio import ServiceBusReceiver, ServiceBusSender
-from dotenv import load_dotenv
 from datetime import datetime
+from decouple import config
 
-load_dotenv()
+TOPIC_NAME = config('TOPIC_NAME')
+SUB_NAME = config('SUB_NAME')
+CONNECTION_STRING = config('CONNECTION_STRING')
 
 class ServiceBusManager:
     def __init__(self):
@@ -13,9 +14,9 @@ class ServiceBusManager:
         Inicializa as configurações da conexão com o Service Bus.
         """
 
-        self.connection_string = os.getenv("CONNECTION_STRING", "")
-        self.topic_name = os.getenv("TOPIC_NAME", "")
-        self.subscription_name = os.getenv("SUB_NAME", "")
+        self.connection_string = CONNECTION_STRING
+        self.topic_name = TOPIC_NAME
+        self.subscription_name = SUB_NAME
 
         if not self.connection_string or not self.topic_name or not self.subscription_name:
             raise ValueError("CONNECTION_STRING, TOPIC_NAME e SUB_NAME devem estar definidas no .env")
